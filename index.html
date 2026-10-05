@@ -1007,6 +1007,13 @@
   </div>
 </div>
 <script async src="https://tally.so/widgets/embed.js"></script>
+<script>
+  // Send applicants to the thank-you page once the Tally form is submitted.
+  window.addEventListener('message', (e) => {
+    if (!/^https:\/\/tally\.so$/.test(e.origin) || typeof e.data !== 'string') return;
+    if (e.data.includes('Tally.FormSubmitted')) window.location.href = 'thank-you.html';
+  });
+</script>
 
 <div class="section" style="padding-top:0;">
   <div class="pull-quote reveal">
