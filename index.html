@@ -1010,13 +1010,18 @@
 <script>
   // After the Tally form is submitted, send each applicant to one of three pages:
   //   1. application-incomplete.html  -> every goal/struggle answer is too short or gibberish
-  //   2. application-received.html    -> Tally's "qualified" calculated field is "No"
+  //   2. application-received.html    -> a country/age answer is in DISQUALIFIERS
   //   3. thank-you.html               -> everyone else
   const MIN_WORDS = 3;    // answers with fewer words count as "too short"
   const MIN_LETTERS = 10; // ...or with fewer letters than this
   // Only these questions are checked (matched against the question title in Tally).
   const CHECKED_QUESTIONS = /your current goal|stopping you from achieving/i;
   const SKIPPED_QUESTIONS = /instagram|handle/i;
+  // Answers that DON'T qualify (anything else qualifies).
+  const DISQUALIFIERS = [
+    { question: /which country are you based/i, answer: /india|pakistan|bangladesh|^\s*other\s*$/i },
+    { question: /your current age/i,            answer: /less than 18/i },
+  ];
 
   function looksLowEffort(text) {
     const t = String(text || '').trim().toLowerCase();
@@ -1030,12 +1035,22 @@
     return false;
   }
 
+  // Tally may send a choice as its text or as option IDs; turn either into text.
+  function answerText(f) {
+    const v = f.answer ? f.answer.value : undefined;
+    const list = Array.isArray(v) ? v : [v];
+    return list.map(x => {
+      const opt = (f.options || []).find(o => o.id === x);
+      return opt ? opt.text : (x == null ? '' : String(x));
+    }).join(', ');
+  }
+
   function pageFor(fields) {
     const checked = fields.filter(f => CHECKED_QUESTIONS.test(f.title || '') && !SKIPPED_QUESTIONS.test(f.title || ''));
-    if (checked.length && checked.every(f => looksLowEffort(f.answer && f.answer.value))) return 'application-incomplete.html';
-    const q = fields.find(f => /^qualified$/i.test(String(f.title || '').trim()));
-    const verdict = q && q.answer ? String(q.answer.value).trim().toLowerCase() : '';
-    if (verdict === 'no' || verdict === 'false' || verdict === '0') return 'application-received.html';
+    if (checked.length && checked.every(f => looksLowEffort(answerText(f)))) return 'application-incomplete.html';
+    const fails = DISQUALIFIERS.some(rule => fields.some(f =>
+      rule.question.test(f.title || '') && rule.answer.test(answerText(f))));
+    if (fails) return 'application-received.html';
     return 'thank-you.html';
   }
 
