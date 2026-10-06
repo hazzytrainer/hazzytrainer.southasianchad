@@ -1010,8 +1010,8 @@
 <script>
   // After the Tally form is submitted, send each applicant to one of three pages:
   //   1. application-incomplete.html  -> every goal/struggle answer is too short or gibberish
-  //   2. application-received.html    -> a country/age answer is in DISQUALIFIERS
-  //   3. thank-you.html               -> everyone else
+  //   2. application-received-unquality.html -> a country/age answer is in DISQUALIFIERS
+  //   3. thank-you-quality.html         -> everyone else
   const MIN_WORDS = 3;    // answers with fewer words count as "too short"
   const MIN_LETTERS = 10; // ...or with fewer letters than this
   // Only these questions are checked (matched against the question title in Tally).
@@ -1050,8 +1050,8 @@
     if (checked.length && checked.every(f => looksLowEffort(answerText(f)))) return 'application-incomplete.html';
     const fails = DISQUALIFIERS.some(rule => fields.some(f =>
       rule.question.test(f.title || '') && rule.answer.test(answerText(f))));
-    if (fails) return 'application-received.html';
-    return 'thank-you.html';
+    if (fails) return 'application-received-unquality.html';
+    return 'thank-you-quality.html';
   }
 
   window.addEventListener('message', (e) => {

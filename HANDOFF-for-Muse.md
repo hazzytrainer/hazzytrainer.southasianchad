@@ -8,8 +8,8 @@ Hey Muse, I need you to finish and launch my VSL funnel's post-application routi
 | File | What it is |
 |---|---|
 | `index.html` | VSL landing page with the Tally form embedded (form ID `44eBGO`). Contains the routing script (search for `Tally.FormSubmitted`). |
-| `thank-you.html` | QUALIFIED applicants: confirmation, 4 "what happens next" steps, 8 client transformations (before/after photo + embedded YouTube video each), and a `DM Me "Applied"` button linking to `https://ig.me/m/hazzytrainer` |
-| `application-received.html` | UNQUALIFIED applicants: thank-you message + 2 free Google Drive guides (Back 2" Wider, Arms 1" Wider) |
+| `thank-you-quality.html` | QUALIFIED applicants: confirmation, 4 "what happens next" steps, 8 client transformations (before/after photo + embedded YouTube video each), and a `DM Me "Applied"` button linking to `https://ig.me/m/hazzytrainer` |
+| `application-received-unquality.html` | UNQUALIFIED applicants: thank-you message + 2 free Google Drive guides (Back 2" Wider, Arms 1" Wider) |
 | `application-incomplete.html` | LOW-EFFORT answers: "We Need a Bit More" message + `Try Again` button back to `index.html#apply` |
 
 ## How the routing works
@@ -19,10 +19,10 @@ When the embedded Tally form is submitted, Tally sends a `Tally.FormSubmitted` p
    - "What is your current goal in the next 12-24 weeks?…" (matched by `your current goal`)
    - "Currently what's been stopping you from achieving your goals?…" (matched by `stopping you from achieving`)
    - Low-effort means under 3 words or under 10 letters, keyboard mashing (asdf, qwer…), one letter repeated 4+ times, 6+ letter words with no vowels, or 3 or fewer unique letters. The Instagram handle question is never checked.
-2. **`application-received.html`** if ANY of these is true:
+2. **`application-received-unquality.html`** if ANY of these is true:
    - Country = "India, Pakistan, Bangladesh" or "Other"
    - Age = "Less than 18"
-3. **`thank-you.html`** for everyone else.
+3. **`thank-you-quality.html`** for everyone else.
 
 Settings are at the top of the script: `MIN_WORDS`, `MIN_LETTERS`, `CHECKED_QUESTIONS`, `SKIPPED_QUESTIONS` and `DISQUALIFIERS`. The rules list only the answers that DON'T qualify, so renaming the qualifying options won't break anything.
 
@@ -37,9 +37,9 @@ Settings are at the top of the script: `MIN_WORDS`, `MIN_LETTERS`, `CHECKED_QUES
 3. **Merge** `claude/github-account-setup-ud4run` into `main` (open a PR and merge).
 4. **Turn on GitHub Pages:** Settings → Pages → Deploy from branch → `main` / root. The repo must be public on a free plan. Optional: connect my custom domain.
 5. **Test all 3 paths on the live URL** with real submissions:
-   - Good answers + USA & Canada + 26-33 → `thank-you.html`
-   - Good answers + India, Pakistan, Bangladesh → `application-received.html`
-   - Good answers + Less than 18 → `application-received.html`
+   - Good answers + USA & Canada + 26-33 → `thank-you-quality.html`
+   - Good answers + India, Pakistan, Bangladesh → `application-received-unquality.html`
+   - Good answers + Less than 18 → `application-received-unquality.html`
    - Goal "abs" + blocker "idk" → `application-incomplete.html`
 6. **Check on a phone:** the videos play inline, the `DM Me "Applied"` button opens an Instagram chat with @hazzytrainer, and both Google Drive guide links open for someone who is logged out (they must be shared as "Anyone with the link").
 
@@ -53,4 +53,4 @@ Settings are at the top of the script: `MIN_WORDS`, `MIN_LETTERS`, `CHECKED_QUES
 - Don't rename the 3 disqualifying options ("India, Pakistan, Bangladesh", "Other", "Less than 18") or the goal/blocker question wording without also updating the patterns in the script.
 - Don't add the routing logic in Tally. We decided the code on GitHub handles it.
 
-Later (not now): add a "Book your call" calendar to `thank-you.html`.
+Later (not now): add a "Book your call" calendar to `thank-you-quality.html`.
