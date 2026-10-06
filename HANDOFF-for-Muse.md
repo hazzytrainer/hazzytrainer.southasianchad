@@ -45,7 +45,7 @@ Settings are at the top of the script: `MIN_WORDS`, `MIN_LETTERS`, `CHECKED_QUES
 
 ## Tally form fixes (in the Tally editor, not the code)
 - Age options overlap: change "33-39" to **"34-39"**.
-- Rename country option B to **"UK, Europe & Australia"** (Australia isn't in Europe).
+- Keep Australia in country option B. It's fine to keep the current wording "Europe (UK, Germany, Switzerland & Australia)". Australia applicants qualify.
 - Optional: switch the goal and blocker questions to **Long answer** and set **Min characters ≈ 20**.
 - Don't add a redirect inside Tally. The page code handles all redirects.
 
