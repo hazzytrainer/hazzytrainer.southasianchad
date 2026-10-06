@@ -1009,11 +1009,14 @@
 <script async src="https://tally.so/widgets/embed.js"></script>
 <script>
   // After the Tally form is submitted, send each applicant to one of three pages:
-  //   1. application-incomplete.html  -> a long answer is too short or gibberish
+  //   1. application-incomplete.html  -> every goal/struggle answer is too short or gibberish
   //   2. application-received.html    -> Tally's "qualified" calculated field is "No"
   //   3. thank-you.html               -> everyone else
-  const MIN_WORDS = 3;    // long answers with fewer words count as "too short"
+  const MIN_WORDS = 3;    // answers with fewer words count as "too short"
   const MIN_LETTERS = 10; // ...or with fewer letters than this
+  // Only these questions are checked (matched against the question title in Tally).
+  const CHECKED_QUESTIONS = /goal|struggl/i;
+  const SKIPPED_QUESTIONS = /instagram|handle/i;
 
   function looksLowEffort(text) {
     const t = String(text || '').trim().toLowerCase();
@@ -1028,8 +1031,8 @@
   }
 
   function pageFor(fields) {
-    const longAnswers = fields.filter(f => f.type === 'TEXTAREA');
-    if (longAnswers.some(f => looksLowEffort(f.answer && f.answer.value))) return 'application-incomplete.html';
+    const checked = fields.filter(f => CHECKED_QUESTIONS.test(f.title || '') && !SKIPPED_QUESTIONS.test(f.title || ''));
+    if (checked.length && checked.every(f => looksLowEffort(f.answer && f.answer.value))) return 'application-incomplete.html';
     const q = fields.find(f => /^qualified$/i.test(String(f.title || '').trim()));
     const verdict = q && q.answer ? String(q.answer.value).trim().toLowerCase() : '';
     if (verdict === 'no' || verdict === 'false' || verdict === '0') return 'application-received.html';
