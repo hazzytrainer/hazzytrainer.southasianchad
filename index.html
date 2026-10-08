@@ -278,11 +278,11 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    /* flat 90% dim, except a tight lit band on the follower counts + handle */
-    background: radial-gradient(ellipse 85% 22% at 50% 12%,
-      rgba(13,11,8,0.08) 0%,
-      rgba(13,11,8,0.50) 60%,
-      rgba(13,11,8,0.90) 100%);
+    /* flat 90%+ dim, except a tight lit band on the follower counts + handle (px-based so it can't stretch) */
+    background: radial-gradient(ellipse 480px 220px at 50% 70px,
+      rgba(13,11,8,0.02) 0%,
+      rgba(13,11,8,0.45) 65%,
+      rgba(13,11,8,0.93) 100%);
   }
 
   /* ── COACHING PHOTO fixed behind the whole page: subtle, present, never the main thing ── */
