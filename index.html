@@ -285,6 +285,27 @@
       rgba(13,11,8,0.92) 100%);
   }
 
+  /* headline, subtext and disclaimer: background dimmed to ~90% behind them only,
+     the follower counts and handle above keep their current brightness */
+  .hero-dim { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .hero-dim::before {
+    content: '';
+    position: absolute;
+    top: -26px;
+    bottom: -36px;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    z-index: -1;
+    pointer-events: none;
+    /* sits on top of the existing shade: together they reach about 90% dark */
+    background: linear-gradient(to bottom,
+      rgba(13,11,8,0) 0,
+      rgba(13,11,8,0.75) 26px,
+      rgba(13,11,8,0.75) calc(100% - 36px),
+      rgba(13,11,8,0) 100%);
+  }
+
   /* ── COACHING PHOTO fixed behind the whole page: subtle, present, never the main thing ── */
   .page-photo {
     position: fixed;
@@ -1091,9 +1112,11 @@
   <div class="hero-eyebrow-row">
     <span class="coach-badge">3 Coaches in 1</span>
   </div>
-  <h1>From <em>Skinny-Fat</em> to <em>Chad.</em></h1>
-  <p class="hero-sub">The exact system 500+ South Asian men used to lose up to 20lbs of fat and build up to 10lbs of muscle, without losing roti, rice, or biryani, despite having 9-5's.</p>
-  <p class="results-note">Results vary. Individual results depend on effort and starting point.</p>
+  <div class="hero-dim">
+    <h1>From <em>Skinny-Fat</em> to <em>Chad.</em></h1>
+    <p class="hero-sub">The exact system 500+ South Asian men used to lose up to 20lbs of fat and build up to 10lbs of muscle, without losing roti, rice, or biryani, despite having 9-5's.</p>
+    <p class="results-note">Results vary. Individual results depend on effort and starting point.</p>
+  </div>
 </section>
 
 <!-- MAIN VSL VIDEO -->
