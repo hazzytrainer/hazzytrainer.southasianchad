@@ -285,44 +285,38 @@
       rgba(13,11,8,0.92) 100%);
   }
 
-  /* headline, subtext and disclaimer: background dimmed to ~90% behind them only,
-     the follower counts and handle above keep their current brightness */
-  .hero-dim { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
-  .hero-dim::before {
-    content: '';
-    position: absolute;
-    top: -50px;              /* reaches up past the "TikTok Studio · Hazzy's board" line */
-    bottom: -36px;
-    left: 50%;
+  /* behind the headline: TikTok Studio line blacked out, rest ~90% dark.
+     Plain backgrounds on full-width blocks (no negative z-index), so iPhone Safari draws them */
+  .hero-dim {
     width: 100vw;
-    transform: translateX(-50%);
-    z-index: -1;
-    pointer-events: none;
-    /* sits on top of the existing shade: together they reach about 90% dark */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-top: -50px;
+    padding: 50px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background: linear-gradient(to bottom,
       rgba(13,11,8,0) 0,
       rgba(13,11,8,0.97) 10px,
-      rgba(13,11,8,0.97) 46px,           /* the TikTok Studio line: fully blacked out */
+      rgba(13,11,8,0.97) 46px,
       rgba(13,11,8,0.82) 80px,
-      rgba(13,11,8,0.82) calc(100% - 36px),
-      rgba(13,11,8,0) 100%);
+      rgba(13,11,8,0.82) calc(100% - 24px),
+      var(--deep) 100%);
   }
+  .hero-dim h1 { margin-bottom: 0; }
 
-  /* subheadline + disclaimer: background fully blacked out behind them */
-  .hero-dim .hero-sub { position: relative; }
-  .hero-dim .hero-sub::before {
-    content: '';
-    position: absolute;
-    top: -14px;
-    bottom: -48px;            /* also covers the results note */
-    left: 50%;
+  /* behind the subheadline + disclaimer: fully black */
+  .hero-sub-block {
     width: 100vw;
-    transform: translateX(-50%);
-    z-index: -1;
-    pointer-events: none;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding: 0 24px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background: linear-gradient(to bottom,
-      rgba(13,11,8,0) 0,
-      var(--deep) 14px,
+      var(--deep) 0,
       var(--deep) calc(100% - 20px),
       rgba(13,11,8,0) 100%);
   }
@@ -1135,6 +1129,8 @@
   </div>
   <div class="hero-dim">
     <h1>From <em>Skinny-Fat</em> to <em>Chad.</em></h1>
+  </div>
+  <div class="hero-sub-block">
     <p class="hero-sub">The exact system 500+ South Asian men used to lose up to 20lbs of fat and build up to 10lbs of muscle, without losing roti, rice, or biryani, despite having 9-5's.</p>
     <p class="results-note">Results vary. Individual results depend on effort and starting point.</p>
   </div>
