@@ -308,6 +308,25 @@
       rgba(13,11,8,0) 100%);
   }
 
+  /* subheadline + disclaimer: background fully blacked out behind them */
+  .hero-dim .hero-sub { position: relative; }
+  .hero-dim .hero-sub::before {
+    content: '';
+    position: absolute;
+    top: -14px;
+    bottom: -48px;            /* also covers the results note */
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(to bottom,
+      rgba(13,11,8,0) 0,
+      var(--deep) 14px,
+      var(--deep) calc(100% - 20px),
+      rgba(13,11,8,0) 100%);
+  }
+
   /* ── COACHING PHOTO fixed behind the whole page: subtle, present, never the main thing ── */
   .page-photo {
     position: fixed;
