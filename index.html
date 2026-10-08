@@ -218,6 +218,48 @@
   }
 
   /* ── VIDEO PLACEHOLDER (main VSL) ── */
+  /* ── BACKGROUND VIDEO behind hero + VSL ── */
+  .hero-bg-zone {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--deep);
+  }
+
+  .hero-bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;       /* whole clip visible, centred at the top */
+    object-position: center top;
+    z-index: -2;
+    filter: blur(2px) saturate(0.85);
+    transition: opacity 0.8s ease;
+    /* soften the clip's edges so it melts into the dark page */
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 30%, #000 55%, transparent 100%);
+            mask-image: radial-gradient(ellipse 75% 65% at 50% 30%, #000 55%, transparent 100%);
+  }
+
+  /* dimmed further while the VSL is playing, so the VSL stays the focus */
+  .hero-bg-zone.vsl-playing .hero-bg-video { opacity: 0.55; }
+
+  .hero-bg-shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom,
+      rgba(13,11,8,0.70) 0%,
+      rgba(13,11,8,0.78) 60%,
+      var(--deep) 100%);
+  }
+
+  /* motion turned off on the device: show a still frame, same size and position */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg-video { display: none; }
+    .hero-bg-zone { background: var(--deep) url("assets/hero-bg-overhead-poster.jpg") center top / contain no-repeat; }
+  }
+
   .video-section {
     padding: 0 24px 80px;
     display: flex;
@@ -979,6 +1021,13 @@
 <!-- ══════════════════════════════
      HERO
 ══════════════════════════════ -->
+<!-- HERO + VSL, with a silent looping training clip behind them -->
+<div class="hero-bg-zone">
+  <video class="hero-bg-video" autoplay muted loop playsinline preload="auto" poster="assets/hero-bg-overhead-poster.jpg" aria-hidden="true">
+    <source src="assets/hero-bg-overhead.mp4" type="video/mp4">
+    <source src="assets/hero-bg-overhead.webm" type="video/webm">
+  </video>
+  <div class="hero-bg-shade"></div>
 <section class="hero">
   <div class="hero-eyebrow-row">
     <p class="hero-eyebrow">South Asian Blueprint</p>
@@ -995,8 +1044,9 @@
 <!-- MAIN VSL VIDEO -->
 <div class="video-section">
   <div class="video-wrap vertical reveal" style="max-width:420px;">
-        <iframe src="https://www.youtube.com/embed/FX5hilf92hw?autoplay=1&mute=1&playsinline=1&rel=0" style="position:absolute;inset:0;width:100%;height:100%;border:0;" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/FX5hilf92hw?autoplay=1&mute=1&playsinline=1&rel=0&enablejsapi=1" id="vsl-player" style="position:absolute;inset:0;width:100%;height:100%;border:0;" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   </div>
+</div>
 </div>
 
 <!-- APPLICATION FORM, EMBEDDED DIRECTLY BELOW THE VSL -->
@@ -1935,6 +1985,37 @@
     window.addEventListener('scroll', () => window.requestAnimationFrame(updateActive), { passive: true });
     window.addEventListener('load', updateActive);
     updateActive();
+  })();
+</script>
+<script>
+  // Background clip: pause it when the top section is off screen (saves battery and data),
+  // and dim it while the VSL is playing so the VSL stays the main thing on screen.
+  (function () {
+    const zone = document.querySelector('.hero-bg-zone');
+    const bg = zone && zone.querySelector('.hero-bg-video');
+    if (!bg) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const play = () => { const p = bg.play(); if (p && p.catch) p.catch(() => {}); };
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !reduceMotion) play(); else bg.pause();
+        });
+      }).observe(zone);
+    }
+
+    // Watch the VSL's play/pause state through the YouTube IFrame API.
+    window.onYouTubeIframeAPIReady = function () {
+      new YT.Player('vsl-player', {
+        events: {
+          onStateChange: (e) => zone.classList.toggle('vsl-playing', e.data === YT.PlayerState.PLAYING)
+        }
+      });
+    };
+    const api = document.createElement('script');
+    api.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(api);
   })();
 </script>
 </body>
