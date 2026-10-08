@@ -252,7 +252,7 @@
     grid-template-columns: repeat(5, 1fr);
     gap: 16px;
     z-index: -2;
-    filter: blur(0.6px) saturate(0.9);
+    filter: saturate(0.9);   /* 0.6px reduced by 20%, then 20% again */
     -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 28%, #000 50%, transparent 90%);
             mask-image: radial-gradient(ellipse 80% 70% at 50% 28%, #000 50%, transparent 90%);
   }
@@ -269,6 +269,14 @@
     .proof-collage img { border-radius: 12px; }
   }
 
+  /* only the centred TikTok profile shows: side screenshots hidden, profile cropped to
+     avatar + handle + follower row with soft edges */
+  .proof-collage img:not(.tt) { visibility: hidden; }
+  .proof-collage .tt {
+    -webkit-mask-image: radial-gradient(ellipse 56% 15% at 50% 24%, #000 66%, transparent 100%);
+            mask-image: radial-gradient(ellipse 56% 15% at 50% 24%, #000 66%, transparent 100%);
+  }
+
   /* keep the headline in front: a soft dark halo behind the hero text */
   .hero-bg-zone .hero h1,
   .hero-bg-zone .hero-sub,
@@ -280,9 +288,42 @@
     z-index: -1;
     /* flat 90%+ dim, except a tight lit band on the follower counts + handle (px-based so it can't stretch) */
     background: radial-gradient(ellipse 480px 220px at 50% 70px,
-      rgba(13,11,8,0.02) 0%,
-      rgba(13,11,8,0.45) 65%,
-      rgba(13,11,8,0.93) 100%);
+      rgba(13,11,8,0) 0%,
+      rgba(13,11,8,0.18) 65%,
+      rgba(13,11,8,0.85) 100%);
+  }
+  /* extra 90% dim band from the top of the 3 Coaches badge down through the results note (follower spotlight above untouched).
+     Same element and technique as the spotlight above, which renders on iPhone. px stops per screen size. */
+  .hero-bg-shade {
+    background: linear-gradient(to bottom,
+        transparent 72px, rgba(13,11,8,0.9) 80px,
+        rgba(13,11,8,0.9) 400px, transparent 414px),
+      radial-gradient(ellipse 480px 220px at 50% 70px,
+        rgba(13,11,8,0) 0%,
+        rgba(13,11,8,0.18) 65%,
+        rgba(13,11,8,0.85) 100%);
+  }
+  @media (min-width: 601px) {
+    .hero-bg-shade {
+      background: linear-gradient(to bottom,
+        transparent 72px, rgba(13,11,8,0.9) 80px,
+        rgba(13,11,8,0.9) 345px, transparent 359px),
+        radial-gradient(ellipse 480px 220px at 50% 70px,
+        rgba(13,11,8,0) 0%,
+        rgba(13,11,8,0.18) 65%,
+        rgba(13,11,8,0.85) 100%);
+    }
+  }
+  @media (min-width: 1000px) {
+    .hero-bg-shade {
+      background: linear-gradient(to bottom,
+        transparent 72px, rgba(13,11,8,0.9) 80px,
+        rgba(13,11,8,0.9) 488px, transparent 502px),
+        radial-gradient(ellipse 480px 220px at 50% 70px,
+        rgba(13,11,8,0) 0%,
+        rgba(13,11,8,0.18) 65%,
+        rgba(13,11,8,0.85) 100%);
+    }
   }
 
   /* ── COACHING PHOTO fixed behind the whole page: subtle, present, never the main thing ── */
@@ -1093,7 +1134,7 @@
   <div class="proof-collage" aria-hidden="true">
     <img src="assets/proof-facebook.jpg" alt="" class="edge">
     <img src="assets/proof-instagram.jpg" alt="">
-    <img src="assets/proof-tiktok.jpg" alt="">
+    <img src="assets/proof-tiktok-clean.jpg" alt="" class="tt">
     <img src="assets/proof-youtube.jpg" alt="">
     <img src="assets/proof-facebook.jpg" alt="" class="edge">
   </div>
