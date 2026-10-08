@@ -10,7 +10,8 @@ Hey Muse, I need you to finish and launch my VSL funnel's post-application routi
 | `index.html` | VSL landing page with the Tally form embedded (form ID `44eBGO`). Contains the routing script (search for `Tally.FormSubmitted`). |
 | `thank-you-quality.html` | QUALIFIED applicants: confirmation, 4 "what happens next" steps, 8 client transformations (before/after photo + embedded YouTube video each), and a `DM Me "Applied"` button linking to `https://ig.me/m/hazzytrainer` |
 | `application-received-unquality.html` | UNQUALIFIED applicants: thank-you message + 2 free Google Drive guides (Back 2" Wider, Arms 1" Wider) |
-| `assets/hero-bg-overhead.*` | Silent looping background clip (overhead extensions) behind the hero + VSL. It pauses when scrolled off screen and dims while the VSL plays (YouTube IFrame API, iframe `id="vsl-player"`). |
+| `assets/proof-*.jpg` | Follower-count screenshots (Instagram, TikTok, YouTube, Facebook) shown centred and softly blurred behind the hero. The email on the TikTok screenshot is blurred out. |
+| `assets/bg-coaching.jpg` | Coaching photo (shoulder-press form correction) fixed behind the whole page, heavily darkened. On phones the whole photo is scaled down so both faces and the hand on the elbow are visible. |
 | `application-incomplete.html` | LOW-EFFORT answers: "We Need a Bit More" message + `Try Again` button back to `index.html#apply` |
 
 ## How the routing works
