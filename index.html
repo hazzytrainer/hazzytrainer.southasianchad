@@ -565,6 +565,30 @@
   }
 
   /* Fully visible inline photo — floats so text wraps beside/below it, never over it */
+  /* all three coaches together, full width under Coach Fahim */
+  .coaches-together {
+    clear: both;
+    margin: 56px auto 0;
+    max-width: 520px;
+    text-align: center;
+  }
+  .coaches-together img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    border: 1px solid rgba(232,129,10,0.2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .coaches-together figcaption {
+    margin-top: 16px;
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(22px, 5vw, 30px);
+    text-transform: uppercase;
+    line-height: 1.15;
+    color: var(--cream);
+  }
+
   .story-inline-photo {
     float: right;
     width: 320px;
@@ -1558,6 +1582,11 @@
       <p class="coach-script">You just live your life and check in. I handle the data, and follow up with you at any moment you slip. So you don't lose momentum and we finally break the start and stop cycle."</p>
     </div>
   </div>
+  <!-- ═══ ALL 3 COACHES TOGETHER (street address blurred in the image) ═══ -->
+  <figure class="coaches-together reveal">
+    <img src="assets/three-coaches.jpg" alt="The three South Asian Chad coaches together in front of a house" loading="lazy" width="900" height="900">
+    <figcaption>Three coaches. One system. Built around your life.</figcaption>
+  </figure>
   <!-- ═══ END COACHES ═══ -->
   </div>
   </div>
