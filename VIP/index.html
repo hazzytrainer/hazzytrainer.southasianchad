@@ -69,6 +69,8 @@
     box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
     overflow-x: auto;
     scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
   }
 
   .tab-nav::-webkit-scrollbar { display: none; }
@@ -90,6 +92,7 @@
     white-space: nowrap;
     border-top: 2px solid transparent;
     transition: color 0.2s, border-color 0.2s;
+    scroll-snap-align: start;
   }
 
   .tab-nav a.active {
@@ -109,10 +112,10 @@
   .tab-nav a.tab-apply.active { border-top-color: transparent; }
 
   /* keep fixed bottom bar from covering the last section's content */
-  body { padding-bottom: 54px; }
+  body { padding-bottom: 68px; }
 
   @media (max-width: 600px) {
-    .tab-nav a { font-size: 10px; padding: 13px 8px; min-width: 66px; }
+    .tab-nav a { font-size: 11px; padding: 20px 10px; min-width: 66px; }
   }
 
   /* ── SITE LOGO (fixed top-left, always visible) ── */
