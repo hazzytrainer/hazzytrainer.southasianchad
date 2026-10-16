@@ -2172,13 +2172,18 @@
   var dots=document.querySelectorAll('.scroll-progress .sp-dot');
   if(!fill||!dots.length)return;
   var secs=['.hero','.video-section','#results','#apply'];
-  var tops=[];
+  var px=[];
   function measure(){
-    tops=secs.map(function(s){
+    var h=document.documentElement;
+    var max=(h.scrollHeight-h.clientHeight)||1;
+    px=secs.map(function(s){
       var el=document.querySelector(s);
-      if(!el)return Infinity;
-      return el.getBoundingClientRect().top+window.scrollY;
+      return el?Math.max(0,el.getBoundingClientRect().top+window.scrollY):0;
     });
+    dots.forEach(function(d,i){
+      if(i<4)d.style.top=(Math.min(1,px[i]/max)*100)+'%';
+    });
+    upd();
   }
   var ticking=false;
   function upd(){
@@ -2191,15 +2196,15 @@
     fill.style.height=(p*100)+'%';
     var mid=y+vh*0.5;
     dots.forEach(function(d,i){
-      var lit=(i<4)?(mid>=tops[i]):((y+vh)>=(h.scrollHeight-120));
+      var lit=(i<4)?(mid>=px[i]):((y+vh)>=(h.scrollHeight-120));
       d.classList.toggle('lit',!!lit);
     });
   }
   function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(upd);}}
   addEventListener('scroll',onScroll,{passive:true});
-  addEventListener('resize',function(){measure();upd();});
-  addEventListener('load',function(){measure();upd();});
-  measure();upd();
+  addEventListener('resize',measure);
+  addEventListener('load',measure);
+  measure();
 })();
 </script>
 </body>
