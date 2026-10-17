@@ -1230,11 +1230,14 @@
 <script async src="https://tally.so/widgets/embed.js"></script>
 <script>
   // After the Tally form is submitted, send each applicant to one of three pages:
-  //   1. application-incomplete.html  -> every goal/struggle answer is too short or gibberish
+  //   1. application-incomplete.html  -> every goal/struggle answer is too short or gibberish,
+  //                                     or any of them has fewer than MIN_SENTENCES sentences
+  //                                     AND fewer than MIN_SENTENCES lines
   //   2. application-received-unquality.html -> a country/age answer is in DISQUALIFIERS
   //   3. book-your-call.html            -> everyone else (qualified: book, then ../thank-you-quality.html)
   const MIN_WORDS = 3;    // answers with fewer words count as "too short"
   const MIN_LETTERS = 10; // ...or with fewer letters than this
+  const MIN_SENTENCES = 3; // each goal/roadblock answer needs at least this many sentences
   // Only these questions are checked (matched against the question title in Tally).
   const CHECKED_QUESTIONS = /your current goal|stopping you from achieving/i;
   const SKIPPED_QUESTIONS = /instagram|handle/i;
@@ -1256,6 +1259,20 @@
     return false;
   }
 
+  // Count sentences (split on . ! ?) — serious applicants write MIN_SENTENCES+ per answer.
+  function sentenceCount(text) {
+    const t = String(text || '').trim();
+    if (!t) return 0;
+    return t.split(/[.!?]+/).map(s => s.trim()).filter(s => /[a-zA-Z]/.test(s)).length;
+  }
+
+  // Count non-empty lines — catches long answers written without clear sentence breaks.
+  function lineCount(text) {
+    const t = String(text || '').trim();
+    if (!t) return 0;
+    return t.split(/\n/).map(s => s.trim()).filter(s => /[a-zA-Z]/.test(s)).length;
+  }
+
   // Tally may send a choice as its text or as option IDs; turn either into text.
   function answerText(f) {
     const v = f.answer ? f.answer.value : undefined;
@@ -1269,6 +1286,10 @@
   function pageFor(fields) {
     const checked = fields.filter(f => CHECKED_QUESTIONS.test(f.title || '') && !SKIPPED_QUESTIONS.test(f.title || ''));
     if (checked.length && checked.every(f => looksLowEffort(answerText(f)))) return '../application-incomplete.html';
+    if (checked.length && checked.some(f => {
+      const a = answerText(f);
+      return sentenceCount(a) < MIN_SENTENCES && lineCount(a) < MIN_SENTENCES;
+    })) return '../application-incomplete.html';
     const fails = DISQUALIFIERS.some(rule => fields.some(f =>
       rule.question.test(f.title || '') && rule.answer.test(answerText(f))));
     if (fails) return '../application-received-unquality.html';
