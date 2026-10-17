@@ -1219,7 +1219,7 @@
 <script async src="https://tally.so/widgets/embed.js"></script>
 <script>
   // After the Tally form is submitted, send each applicant to one of three pages:
-  //   1. application-incomplete.html  -> every goal/struggle answer is too short or gibberish,
+  //   1. application-semi-qualified.html -> every goal/struggle answer is too short or gibberish,
   //                                     or any of them has fewer than MIN_SENTENCES sentences
   //                                     AND fewer than MIN_SENTENCES lines
   //   2. application-received-unquality.html -> a country/age answer is in DISQUALIFIERS
@@ -1274,11 +1274,11 @@
 
   function pageFor(fields) {
     const checked = fields.filter(f => CHECKED_QUESTIONS.test(f.title || '') && !SKIPPED_QUESTIONS.test(f.title || ''));
-    if (checked.length && checked.every(f => looksLowEffort(answerText(f)))) return 'application-incomplete.html';
+    if (checked.length && checked.every(f => looksLowEffort(answerText(f)))) return 'application-semi-qualified.html';
     if (checked.length && checked.some(f => {
       const a = answerText(f);
       return sentenceCount(a) < MIN_SENTENCES && lineCount(a) < MIN_SENTENCES;
-    })) return 'application-incomplete.html';
+    })) return 'application-semi-qualified.html';
     const fails = DISQUALIFIERS.some(rule => fields.some(f =>
       rule.question.test(f.title || '') && rule.answer.test(answerText(f))));
     if (fails) return 'application-received-unquality.html';

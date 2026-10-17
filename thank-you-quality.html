@@ -382,24 +382,7 @@
   </div>
   <p class="hero-eyebrow">Application Received</p>
   <h1>You Just Took<br>the <em>First Step.</em></h1>
-  <p class="hero-sub">Thanks for your application. Coach Hazzy will review it carefully. Since we get over 1400+ Applications a month, selection process is strict as we take on a maximum 10 clients per month.</p>
-</section>
-
-<!-- ══════════════════════════════
-     ADD TO CALENDAR
-══════════════════════════════ -->
-<div class="divider"></div>
-<section class="section">
-  <div class="cal-card">
-    <p class="section-label">Don't Miss Your Call</p>
-    <h3>Lock It In Your <em>Calendar</em></h3>
-    <p>Add your discovery call to Google Calendar so it doesn't slip. You'll also get a calendar invite by email.</p>
-    <a class="btn-gcal" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Discovery%20Call%20%E2%80%94%20South%20Asian%20Chad%20Method&amp;details=Your%20discovery%20call%20with%20Coach%20Hazzy%27s%20team.%20We%27ll%20review%20your%20application%2C%20tell%20you%20what%27s%20possible%20for%20you%2C%20and%20lay%20out%20your%20plan.%0A%0ACheck%20your%20email%20for%20the%20Calendly%20confirmation%20with%20your%20video%20link." target="_blank" rel="noopener">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Add to Google Calendar
-    </a>
-    <p class="cal-note">Pick the date and time you just booked on the previous step.</p>
-  </div>
+  <p class="hero-sub">Thanks for your application. Coach Hazzy will review it carefully. Since we get over 1400+ Applications a month, selection process is strict as we take on a maximum 5 clients per month.</p>
 </section>
 
 <!-- ══════════════════════════════
@@ -421,19 +404,31 @@
     <div class="step">
       <div class="step-num">2</div>
       <div>
-        <div class="step-title">I review your application.</div>
-        <p>I read every application personally to see where you're at and what's been holding you back.</p>
+        <div class="step-title">Add it to your calendar.</div>
+        <p>Tap below to save your strategy call to Google Calendar so it doesn't slip.</p>
+        <p style="margin-top:14px;"><a id="gcal-btn" class="btn-gcal" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Carve-your-Body%3A+Strategy+Call&amp;details=Topic%3A+Carve-your-Body%3A+Strategy+Call%0A%0AJoin+Zoom+Meeting+https%3A%2F%2Fus02web.zoom.us%2Fj%2F4831649042%3Fpwd%3DZGtDaEd6M0E4M2VrM3N6ckZ5bit1QT09%0A%0AMeeting+ID%3A+483+164+9042%0APasscode%3A+Coach" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Add to Google Calendar
+        </a></p>
+        <p class="cal-note" id="gcal-note">Title, Zoom link and details are filled in. Pick your slot's date and time.</p>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div>
-        <div class="step-title">I reach out to you.</div>
-        <p>I'll personally reach out to see if we're the right fit through Instagram or Text Message.</p>
+        <div class="step-title">I review your application.</div>
+        <p>I read every application personally to see where you're at and what's been holding you back.</p>
       </div>
     </div>
     <div class="step">
       <div class="step-num">4</div>
+      <div>
+        <div class="step-title">I reach out to you.</div>
+        <p>Even with your call booked, I'll personally message you on Instagram or text to learn a bit more about you before we talk.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
       <div>
         <div class="step-title">We build your plan.</div>
         <p>If it's a fit, you get three coaches, one system, and a plan built around your schedule and your food.</p>
@@ -532,6 +527,36 @@
   <p>South Asian Chad Method — a program by South Asian Blueprint</p>
   <p style="margin-top:6px;">© 2026 Coach Hazzy · All Rights Reserved</p>
 </footer>
+
+<script>
+  // Pre-fill the Google Calendar button with the exact slot Calendly passes
+  // via ?event_start_time= / ?event_end_time= on its external-site redirect.
+  // Falls back to manual date-pick when the params are absent.
+  (function () {
+    var q = new URLSearchParams(window.location.search);
+    var start = q.get('event_start_time'), end = q.get('event_end_time');
+    if (!start || !end) return;
+    function gcal(d) {
+      var dte = new Date(d);
+      if (isNaN(dte.getTime())) return null;
+      return dte.toISOString().slice(0, 19).replace(/[-:]/g, '') + 'Z';
+    }
+    var gs = gcal(start), ge = gcal(end);
+    if (!gs || !ge) return;
+    var btn = document.getElementById('gcal-btn');
+    if (btn) {
+      var url = new URL(btn.href);
+      url.searchParams.set('dates', gs + '/' + ge);
+      btn.href = url.toString();
+    }
+    var note = document.getElementById('gcal-note');
+    if (note) {
+      note.textContent = 'Pre-filled with your slot: ' + new Date(start).toLocaleString(undefined, {
+        weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit'
+      }) + '. Just hit save.';
+    }
+  })();
+</script>
 
 </body>
 </html>

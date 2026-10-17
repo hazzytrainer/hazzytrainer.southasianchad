@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Application Received | Coach Hazzy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron: #FFD600;
+    --saffron-light: #FFE666;
+    --deep: #0D0B08;
+    --charcoal: #1A1713;
+    --warm-dark: #221E18;
+    --cream: #F5EFE6;
+    --muted: #9A8E7E;
+    --green: #3D8C5E;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--deep);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/filter%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 96px 24px 40px;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,129,10,0.18) 0%, transparent 70%);
+  }
+
+  .check {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--saffron-light) 0%, var(--saffron) 100%);
+    box-shadow: 0 8px 32px rgba(232,129,10,0.35);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: pop 0.6s 0.1s cubic-bezier(.2,1.4,.4,1) forwards;
+  }
+
+  .check svg { width: 36px; height: 36px; }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--saffron);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+
+  h1, h2 {
+    font-family: 'Anton', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 1.05;
+  }
+
+  h1 {
+    font-size: clamp(38px, 7vw, 80px);
+    max-width: 860px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  h1 em, h2 em { font-style: normal; color: var(--saffron); }
+
+  .hero-sub {
+    font-size: 18px;
+    max-width: 560px;
+    color: rgba(245,239,230,0.85);
+    opacity: 0;
+    animation: fadeUp 0.8s 0.55s forwards;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--saffron);
+    text-align: center;
+    margin-bottom: 14px;
+  }
+
+  h2 {
+    font-size: clamp(30px, 5vw, 52px);
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .divider {
+    height: 1px;
+    max-width: 720px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, rgba(232,129,10,0.35), transparent);
+  }
+
+  /* ── NEXT STEPS ── */
+  .steps { display: grid; gap: 16px; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 18px;
+    align-items: start;
+    padding: 24px;
+    background: var(--charcoal);
+    border-radius: 12px;
+    border: 1px solid rgba(245,239,230,0.07);
+  }
+
+  .step-num {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    color: var(--saffron);
+    border: 1px solid rgba(255,214,0,0.35);
+  }
+
+  .step-title {
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 4px;
+  }
+
+  .step p { color: rgba(245,239,230,0.75); font-size: 15px; }
+
+  /* ── GUIDES ── */
+  .guides {
+    margin-top: 40px;
+    padding: 28px;
+    background: var(--warm-dark);
+    border-radius: 12px;
+    border: 1px solid rgba(245,239,230,0.07);
+    text-align: center;
+  }
+
+  .guides h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .guides p { color: rgba(245,239,230,0.75); font-size: 15px; margin-bottom: 18px; }
+
+  .guide-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .guide-links a {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,214,0,0.45);
+    color: var(--saffron);
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .guide-links a:hover { background: var(--saffron); color: var(--deep); }
+
+  footer {
+    border-top: 1px solid rgba(245,239,230,0.07);
+    padding: 32px 24px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.4); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding-top: 84px; }
+    .hero-sub { font-size: 16px; }
+    .step { grid-template-columns: 44px 1fr; padding: 20px; gap: 14px; }
+    .step-num { width: 44px; height: 44px; font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     SEMI-QUALIFIED APPLICATION
+══════════════════════════════ -->
+<section class="hero">
+  <div class="check" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#0D0B08" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+  </div>
+  <p class="hero-eyebrow">Application Received</p>
+  <h1>Thanks,<br>We've Got <em>It.</em></h1>
+  <p class="hero-sub">Your answers were a little brief, so we couldn't fast-track you to a call. But a real coach still reviews every application by hand.</p>
+</section>
+
+<div class="divider"></div>
+
+<section class="section">
+  <p class="section-label">What Happens Next</p>
+  <h2>Here's How<br>It <em>Works</em></h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">We review your application.</div>
+        <p>A coach reads through what you sent within 24 to 48 hours.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Hazzy reaches out.</div>
+        <p>If it's a fit, he'll message you personally on Instagram or text.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">You book your call.</div>
+        <p>Then you grab a time and we build your game plan.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="guides">
+    <h3>While you wait: 2 free guides</h3>
+    <p>Start making progress today, on us.</p>
+    <div class="guide-links">
+      <a href="https://drive.google.com/file/d/1zl6wBjEi1ZE3RYX5EQkrmu2yUewGX04q/view?usp=drive_link" target="_blank" rel="noopener">Back 2" Wider in 30 Days</a>
+      <a href="https://drive.google.com/file/d/1_Oi2TWVZrBMp9gs4uViy9A8LWARuhZRl/view?usp=drive_link" target="_blank" rel="noopener">Arms 1" Wider in 30 Days</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>South Asian Chad Method: a program by South Asian Blueprint</p>
+  <p style="margin-top:6px;">© 2026 Coach Hazzy: All Rights Reserved</p>
+</footer>
+
+</body>
+</html>

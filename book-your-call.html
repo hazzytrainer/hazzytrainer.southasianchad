@@ -159,8 +159,8 @@
 
 <section class="hero">
   <p class="hero-eyebrow">You're Qualified</p>
-  <p class="selectivity"><strong>83%</strong> of applicants never make it to this page, as we're a small team we only want to work with the best. Congrats on making the cut.</p>
   <h1>Book Your <em>Call.</em></h1>
+  <p class="selectivity"><strong>83%</strong> of applicants never make it to this page, as we're a small team and this is a serious coaching program, congrats on making the cut.</p>
   <p class="hero-sub">On this 45-minute call, we'll go through your application, figure out what is the 1-2 things holding you back the most in achieving your dream body. Then create a game plan to move you closer towards it, and if we're a right fit, we work together, if not, you keep the game plan and you do it on your own.</p>
 </section>
 
@@ -176,10 +176,15 @@
 
 <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 <script>
-  // Once the call is booked, move qualified leads to the thank-you page.
+  // Calendly's "redirect to external site" setting sends bookers to the
+  // thank-you page WITH ?event_start_time / ?event_end_time attached, so the
+  // calendar button can pre-fill the exact slot. This fallback only fires if
+  // that redirect hasn't happened (page still here after 12s).
   window.addEventListener('message', function (e) {
     if (e.data && e.data.event === 'calendly.event_scheduled') {
-      window.location.href = 'thank-you-quality.html';
+      setTimeout(function () {
+        window.location.href = 'thank-you-quality.html';
+      }, 12000);
     }
   });
 </script>
