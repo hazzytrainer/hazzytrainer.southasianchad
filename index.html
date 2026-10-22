@@ -1234,10 +1234,9 @@ fbq('track', 'PageView');
 <script async src="https://tally.so/widgets/embed.js"></script>
 <script>
   // After the Tally form is submitted, send each applicant to one of three pages:
-  //   1. application-semi-qualified.html -> any long answer (goal or blocker) is gibberish or
-  //                                     under the effort bar (fewer than MIN_EFFORT_WORDS words
-  //                                     AND fewer than MIN_EFFORT_SENTENCES sentences AND fewer
-  //                                     than MIN_EFFORT_LINES lines)
+  //   1. application-semi-qualified.html -> any long answer (goal or blocker) is gibberish, or
+  //                                     the answers are under the effort bar AND total fewer
+  //                                     than MIN_TOTAL_WORDS words together
   //   2. application-received-unquality.html -> a country/age answer is in DISQUALIFIERS
   //   3. book-your-call.html            -> everyone else (qualified: book, then thank-you-quality.html)
   const MIN_WORDS = 3;    // answers with fewer words count as "too short" (gibberish screen)
@@ -1247,6 +1246,7 @@ fbq('track', 'PageView');
   const MIN_EFFORT_WORDS = 10;
   const MIN_EFFORT_SENTENCES = 2;
   const MIN_EFFORT_LINES = 3;
+  const MIN_TOTAL_WORDS = 40;   // combined escape hatch: both answers together
   // Only these questions are checked (matched against the question title in Tally).
   const CHECKED_QUESTIONS = /your current goal|stopping you from achieving/i;
   const SKIPPED_QUESTIONS = /instagram|handle/i;
@@ -1302,11 +1302,13 @@ fbq('track', 'PageView');
 
   function pageFor(fields) {
     const checked = fields.filter(f => CHECKED_QUESTIONS.test(f.title || '') && !SKIPPED_QUESTIONS.test(f.title || ''));
-    // Every long answer must clear the effort bar and the gibberish screen.
-    if (checked.some(f => {
-      const a = answerText(f);
-      return looksLowEffort(a) || (wordCount(a) < MIN_EFFORT_WORDS && sentenceCount(a) < MIN_EFFORT_SENTENCES && lineCount(a) < MIN_EFFORT_LINES);
-    })) return 'application-semi-qualified.html';
+    const answers = checked.map(f => answerText(f));
+    const anyGibberish = answers.some(a => looksLowEffort(a));
+    const eachClears = answers.every(a => wordCount(a) >= MIN_EFFORT_WORDS || sentenceCount(a) >= MIN_EFFORT_SENTENCES || lineCount(a) >= MIN_EFFORT_LINES);
+    const totalWords = answers.reduce((n, a) => n + wordCount(a), 0);
+    // Semi-qualified if any answer is gibberish, or the answers fail the bar
+    // individually AND total fewer than MIN_TOTAL_WORDS words together.
+    if (anyGibberish || (!eachClears && totalWords < MIN_TOTAL_WORDS)) return 'application-semi-qualified.html';
     const fails = DISQUALIFIERS.some(rule => fields.some(f =>
       rule.question.test(f.title || '') && rule.answer.test(answerText(f))));
     if (fails) return 'application-received-unquality.html';
