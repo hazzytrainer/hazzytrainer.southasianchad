@@ -1331,6 +1331,7 @@ fbq('track', 'PageView');
     let msg;
     try { msg = JSON.parse(e.data); } catch (err) { return; }
     if (!msg || msg.event !== 'Tally.FormSubmitted') return;
+    if (window.fbq) fbq('track', 'CompleteRegistration');
     const fields = (msg.payload && msg.payload.fields) || [];
     window.location.href = pageFor(fields);
   });
